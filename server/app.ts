@@ -5,6 +5,7 @@ import dotenv from 'dotenv';
 import { initializeDatabase } from './config/database';
 import {userRouter} from './routes/userRoutes';
 import { questionRouter } from './routes/questionRoutes'
+import  { leaderboardRouter }   from './routes/leaderboardRoutes';
 
 
 dotenv.config();    
@@ -19,6 +20,7 @@ app.use(cors({
 
 app.use('/api/user', userRouter)
 app.use('/api/questions', questionRouter)
+app.use('/api/leaderboard', leaderboardRouter);
 
 const startServer = async () => {
     try {
@@ -38,7 +40,4 @@ const startServer = async () => {
 startServer();
 const { PORT } = process.env;
 
-// app.listen(PORT || 5000, () => {
-//     console.log(`run on ${PORT || 5000}`)
-// }) 
 
