@@ -39,18 +39,25 @@ const initializeDatabase = async () => {
         if (!hasQuestionsTable) {
             await exports.db.schema.createTable('questions', table => {
                 table.increments('id');
-                table.text('question').notNullable();
-                table.string('category', 100).notNullable();
+                table.text('question_text').notNullable();
                 table.text('correct_answer').notNullable();
-                table.specificType('incorrect_answers', 'text ARRAY').notNullable();
-                table.string('difficulty', 50);
-                table.timestamps(true, true);
+                table.specificType('options', 'text[]').notNullable();
+                table.text('category').notNullable();
             });
             console.log('Questions table created successfully');
         }
-        // Si después necesitas más tablas (por ejemplo, para usuarios o scores)
-        // las puedes agregar aquí fácilmente
-        console.log('Database initialized successfully');
+        const hasLeaderboardTable = await exports.db.schema.hasTable('leaderboard');
+        if (!hasLeaderboardTable) {
+            await exports.db.schema.createTable('leaderboard', (table) => {
+                table.increments('id');
+                table.string('email').notNullable().unique();
+                table.integer('score').notNullable();
+                table.timestamps(true, true);
+            });
+            console.log('Leaderboard table created successfully');
+        }
+        // Si necesito más tablas (por ejemplo, para usuarios o scores)
+        // las agego aquí fácilmente
     }
     catch (error) {
         console.error('Error initializing database:', error);
