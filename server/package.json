@@ -4,7 +4,7 @@
   "main": "app.ts",
   "type": "commonjs",
   "engines": {
-    "node": ">=16.0.0"
+    "node": "18.x"
   },
   "scripts": {
     "start": "node dist/app.js",
