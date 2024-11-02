@@ -24,9 +24,11 @@ function App() {
   const [token, setToken] = useState<string | null>(null);
   const [userId, setUserId] = useState<number | null>(null);
   const [userEmail, setUserEmail] = useState<string | null>(null);
+  const apiUrl = import.meta.env.VITE_BASE_URL;
+
 
   return (
-    <AuthContext.Provider value={{ token, setToken, userId, setUserId, userEmail, setUserEmail }}>
+    <AuthContext.Provider value={{ token, setToken, userId, setUserId, userEmail, setUserEmail, apiUrl }}>
     <Header />
     <Routes>
       <Route path='/' element={<Home />} />
