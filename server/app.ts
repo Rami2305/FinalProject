@@ -15,7 +15,7 @@ app.use(express.json())
 app.use(cookieParser())
 app.use(cors({
     origin: process.env.NODE_ENV === 'production' 
-    ? ['https://triviagg.onrender.com']  // Esto lo cambiaremos cuando tengamos la URL de Render
+    ? ['https://triviaggc.onrender.com']  // Esto lo cambiaremos cuando tengamos la URL de Render
     : ['http://localhost:5173'],
 credentials: true
 }))
