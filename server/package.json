@@ -9,7 +9,7 @@
   "scripts": {
     "start": "ts-node app.ts",
     "build": "tsc",
-    "serve": "node dist/app.js", 
+    "serve": "node dist/app.js",
     "dev": "ts-node-dev app.ts",
     "migrate": "knex migrate:latest",
     "migrate:down": "knex migrate:down",
@@ -20,7 +20,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "bcrypt": "^5.1.1",
+    "bcryptjs": "^2.4.3",
     "body-parser": "^1.20.3",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
@@ -33,7 +33,6 @@
     "pg-pool": "^3.7.0"
   },
   "devDependencies": {
-    "@types/bcrypt": "^5.0.2",
     "@types/cookie-parser": "^1.4.7",
     "@types/cors": "^2.8.17",
     "@types/express": "^5.0.0",
@@ -41,6 +40,7 @@
     "@types/knex": "^0.16.1",
     "@types/node": "^22.8.6",
     "@types/pg": "^8.11.10",
+    "@types/bcryptjs": "^2.4.6",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.6.3"
   }
