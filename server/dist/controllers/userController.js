@@ -4,7 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.userController = void 0;
-const bcrypt_1 = __importDefault(require("bcrypt"));
+const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const user_1 = require("../models/user");
 const dotenv_1 = __importDefault(require("dotenv"));
@@ -33,7 +33,7 @@ exports.userController = {
                 res.status(404).json({ message: 'user not found, when trying to login' });
                 return;
             }
-            const passwordMatch = await bcrypt_1.default.compare(password + '', user.password);
+            const passwordMatch = await bcryptjs_1.default.compare(password + '', user.password);
             if (!passwordMatch) {
                 res.status(401).json({ message: 'Authentication failed because pass dont match' });
                 return;

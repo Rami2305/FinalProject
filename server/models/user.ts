@@ -1,6 +1,6 @@
 import { Knex } from 'knex';
 import {db } from '../config/database'
-import bcrypt from 'bcrypt'
+import bcrypt from 'bcryptjs'
 
 interface UserInfo {
     password: string,

@@ -5,13 +5,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.userModel = void 0;
 const database_1 = require("../config/database");
-const bcrypt_1 = __importDefault(require("bcrypt"));
+const bcryptjs_1 = __importDefault(require("bcryptjs"));
 exports.userModel = {
     createUser: async (userInfo) => {
         const { password, email } = userInfo;
         const trx = await database_1.db.transaction();
         try {
-            const hashPassword = await bcrypt_1.default.hash(password + '', 10);
+            const hashPassword = await bcryptjs_1.default.hash(password + '', 10);
             const [user] = await trx('usersfp').insert({ email, password: hashPassword }, ['email', 'id']);
             await trx.commit();
             return user;
