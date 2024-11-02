@@ -1,16 +1,16 @@
 {
-  "name": "backend",
+  "name": "server",
   "version": "1.0.0",
   "main": "app.ts",
+  "type": "commonjs",
   "engines": {
     "node": ">=16.0.0"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node dist/app.js",
-    "dev": "ts-node-dev app.ts",
+    "start": "ts-node app.ts",
     "build": "tsc",
-    "watch": "tsc -w",
+    "serve": "node dist/app.js", 
+    "dev": "ts-node-dev app.ts",
     "migrate": "knex migrate:latest",
     "migrate:down": "knex migrate:down",
     "migrate:rollback": "knex migrate:rollback"
