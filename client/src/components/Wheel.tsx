@@ -37,7 +37,7 @@ const WheelComponent: React.FC<WheelComponentProps> = ({ mode }) => {
   const [score, setScore] = useState<number>(0);
   const [selectedDifficulty, setSelectedDifficulty] = useState<Difficulty>('medium');
   const [timer, setTimer] = useState<number>(20);
-  const { userId, userEmail } = useContext(AuthContext);
+  const { userId, userEmail, apiUrl } = useContext(AuthContext);
 //   const [gamesPlayed] = useState<number>(0);
   
   const fetchQuestion = async (category: ValidCategory) => {
@@ -46,7 +46,7 @@ const WheelComponent: React.FC<WheelComponentProps> = ({ mode }) => {
       try {
           console.log('Fetching question for category:', category);
           const response = await fetch(
-              `http://localhost:5000/api/questions?category=${category}&difficulty=${selectedDifficulty}`
+              `${apiUrl}/api/questions?category=${category}&difficulty=${selectedDifficulty}`
           );
     
           if (!response.ok) {
