@@ -13,12 +13,21 @@ const app = express()
 
 app.use(express.json())
 app.use(cookieParser())
+// app.use(cors({
+//     origin: process.env.NODE_ENV === 'production' 
+//     ? ['https://triviaggc.onrender.com']  // Esto lo cambiaremos cuando tengamos la URL de Render
+//     : ['http://localhost:5173'],
+// credentials: true
+// }))
+
+// ESTe ESTANAGREGADOS EL 2/11 17hs para chequear los servidores online
 app.use(cors({
-    origin: process.env.NODE_ENV === 'production' 
-    ? ['https://triviaggc.onrender.com']  // Esto lo cambiaremos cuando tengamos la URL de Render
-    : ['http://localhost:5173'],
-credentials: true
+    origin: ['https://triviaggc.onrender.com', 'http://localhost:5173'],
+    credentials: true,
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept'],
+    exposedHeaders: ['Content-Range', 'X-Content-Range']
 }))
+// HASTAACA
 
 app.use('/api/user', userRouter)
 app.use('/api/questions', questionRouter)
