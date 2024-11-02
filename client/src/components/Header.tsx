@@ -1,5 +1,5 @@
 import {AppBar, Toolbar, Button, Stack, Typography, Box, Container} from '@mui/material'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate  } from 'react-router-dom'
 import { useContext } from 'react'
 import { AuthContext } from '../App'
 import { authAPI } from '../config/axios'
@@ -7,12 +7,14 @@ import { Home, ExitToApp, EmojiEvents, SportsEsports } from '@mui/icons-material
 const Header: React.FC = () => {
     const authContext = useContext(AuthContext);
     const { token, setToken }:any = authContext;
+    const navigate = useNavigate();
 
     const logout = async () => {
         try {
             const response = await authAPI.logout();
             if (response.status === 200) {
                 setToken(null);
+                navigate('/');
             }
         } catch (error) {
             console.error('Error during logout:', error);
@@ -121,27 +123,5 @@ const Header: React.FC = () => {
     </AppBar>
 );
 };
-    //     <Stack spacing={2} direction={'row'}>
-    //     {token ? (
-    //         <>
-    //             <Button component={Link} to='/Portal'>Portal</Button>
-    //             <Button component={Link} to='/play'>Play</Button>
-    //             <Button component={Link} to='/leaderboard'>Leaderboard</Button>
-    //             <Button onClick={logout}>Logout</Button>
-    //         </>
-    //     ) : (
-    //         <Button component={Link} to='/'>Home</Button>
-    //     )}
-    // </Stack>
-        // <Stack spacing={2} direction={'row'}>
-        //     <Button component={Link} to='/login'>Login</Button>
-        //     <Button component={Link} to='/register'>Register</Button>
-        //     <Button component={Link} to='/'>Dashboard</Button>
-        //     <Button component={Link} to='/play'>Play</Button>
-        //     <Button component={Link} to='/admin'>Admin</Button>
-        //     <Button onClick={logout}>Logout</Button>
-        // </Stack>
-//     );
-// }
 
 export default Header;

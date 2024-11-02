@@ -13,6 +13,11 @@ interface User {
     password: string;
 }
 
+interface UserEmail {
+    id: number;
+    email: string;
+    password: string;
+}
 export const userModel = {
     createUser: async (userInfo:UserInfo): Promise<Omit<User,'password'>> => {
         const { password, email } = userInfo;
@@ -52,5 +57,5 @@ export const userModel = {
         } catch (error) {
             throw error
         }
-    }
+    },
 }

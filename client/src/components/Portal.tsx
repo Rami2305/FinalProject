@@ -1,17 +1,18 @@
-import { Box, Container, Typography, Paper, Stack } from '@mui/material';
-import { useContext, useEffect, useState } from 'react';
+import { Box, Container, Typography, Paper, Stack, } from '@mui/material';
+import { useContext, useEffect } from 'react';
 import { AuthContext } from '../App';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 
 export interface PortalProps {
     highScore: number;
+    newScore: number;
 }
 
 const Portal: React.FC = ( ) => {
     const authContext = useContext(AuthContext);
-    const { userEmail } = useContext(AuthContext);
-    const [highScore, setHighScore] = useState<number>(0);
+    // const { userEmail } = useContext(AuthContext);
+    
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -19,51 +20,26 @@ const Portal: React.FC = ( ) => {
             navigate('/');
         }
     }, [authContext?.token, navigate]);
-    useEffect(() => {
-        const fetchUserHighScore = async () => {
-          try {
-            const response = await fetch(`/api/leaderboard/${userEmail}`);
-            if (!response.ok) {
-              throw new Error(`Error fetching user high score: ${response.status} - ${response.statusText}`);
-            }
-            const data = await response.json();
-            setHighScore(data.score);
-          } catch (error) {
-            console.error('Error fetching user high score:', error);
-          }
-        };
-        fetchUserHighScore();
-      }, [userEmail]);
+   
     return (
         <Container>
             <Box sx={{ mt: 4 }}>
-                <Typography variant="h4" sx={{ mb: 4 }}>
+                <Typography variant="h4" sx={{ mb: 4, color: '#3f51b5', fontWeight: 'bold', textAlign: 'center' }}>
                     Welcome to Trivia Game!
                 </Typography>
 
                 <Stack spacing={3}>
-                    <Paper sx={{ p: 3 }}>
-                        <Typography variant="h6">
+                    <Paper sx={{ p: 3, backgroundColor: 'rgba(255, 255, 255, 0.8)', borderRadius: '10px', boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)'  }}>
+                        <Typography variant="h6" sx={{ color: '#3f51b5', fontWeight: 'bold' }}>
                             Quick Start
                         </Typography>
                         <Typography>
-                            Click 'Play' to start a new game. Select your difficulty level and spin the wheel!
+                            Click <Link to="/play" style={{textDecoration: 'none', color: '#3f51b5', fontWeight: 'bold' }}>Play</Link> to start a new game. Select your difficulty level and spin the wheel!
                         </Typography>
                     </Paper>
 
                     <Paper sx={{ p: 3 }}>
-                        <Typography variant="h6">Your Stats</Typography>
-                        <Typography>
-                            Games Played:
-                            <br />
-                            Rank: 
-                            <br />
-                            High Score: {highScore}
-                        </Typography>
-                    </Paper>
-
-                    <Paper sx={{ p: 3 }}>
-                        <Typography variant="h6">
+                        <Typography variant="h6" sx={{ color: '#3f51b5', fontWeight: 'bold' }}>
                             How to Play
                         </Typography>
                         <Typography component="div">
@@ -74,7 +50,20 @@ const Portal: React.FC = ( ) => {
                                 <Box>4. Score points for correct answers</Box>
                             </Stack>
                         </Typography>
+                     </Paper>    
+                    <Paper sx={{ p: 3 }}>
+                        <Typography variant="h6">Your Stats</Typography>
+                        <Typography>
+                            Games Played:
+                            <br />
+                            Rank: 
+                            <br />
+                            High Score: 
+                        </Typography>
                     </Paper>
+
+                    
+                   
 
                 </Stack>
             </Box>

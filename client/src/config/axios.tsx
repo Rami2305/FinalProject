@@ -37,7 +37,7 @@ export const authAPI = {
         };
     },
     
-    logout: () => api.delete('/user/logout')
+    logout: () => api.delete('/api/user/logout')
 };
 
 

@@ -77,6 +77,7 @@ export const userController = {
             res.status(500).json({message:'internal server error on getUsers'})
         }
     },
+
     verifyAuth: (req:Request, res:Response): void => {
         /**gemerate token */
         const accessToken = jwt.sign(

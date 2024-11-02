@@ -57,12 +57,15 @@ const LoginRegister: React.FC<LoginRegisterProps> = ({ mode }) => {
                   padding: 4,
                   display: 'flex',
                   flexDirection: 'column',
-                  alignItems: 'center'
+                  alignItems: 'center',
+                  backgroundColor: 'rgba(255, 255, 255, 0.8)',
+                  borderRadius: '10px',
+                  boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)'
               }}
           >
               {/* Header */}
-              <Typography component="h1" variant="h5" sx={{ mb: 3 }}>
-                  {mode === 'Login' ? 'Iniciar Sesión' : 'Registrarse'}
+              <Typography component="h1" variant="h5" sx={{ mb: 3,  color: '#3f51b5', fontWeight: 'bold' }}>
+                  {mode === 'Login' ? 'Login' : 'Register'}
               </Typography>
 
               {/* Form */}
@@ -132,12 +135,12 @@ const LoginRegister: React.FC<LoginRegisterProps> = ({ mode }) => {
                       fullWidth
                       variant="contained"
                       disabled={loading}
-                      sx={{ mt: 3, mb: 2, py: 1.5 }}
+                      sx={{ mt: 3, mb: 2, py: 1.5, backgroundColor: '#3f51b5', color: 'white', '&:hover': { backgroundColor: '#303f9f' } }}
                   >
                       {loading ? (
                           <CircularProgress size={24} color="inherit" />
                       ) : (
-                          mode === 'Login' ? 'Iniciar Sesión' : 'Registrarse'
+                          mode === 'Login' ? 'Login' : 'Register'
                       )}
                   </Button>
 
@@ -146,11 +149,11 @@ const LoginRegister: React.FC<LoginRegisterProps> = ({ mode }) => {
                       fullWidth
                       variant="text"
                       onClick={() => navigate(mode === 'Login' ? '/register' : '/login')}
-                      sx={{ mt: 1 }}
+                      sx={{ mt: 1, color: '#3f51b5', '&:hover': { backgroundColor: 'rgba(63, 81, 181, 0.1)' } }}
                   >
                       {mode === 'Login' 
-                          ? '¿No tienes cuenta? Regístrate' 
-                          : '¿Ya tienes cuenta? Inicia sesión'}
+                          ? "Don't have an account? Register here"
+                          : 'Already have an account? Log in'}
                   </Button>
               </Box>
           </Paper>
@@ -159,81 +162,3 @@ const LoginRegister: React.FC<LoginRegisterProps> = ({ mode }) => {
 };
 
 export default LoginRegister;
-// const LoginRegister: React.FC<LoginRegisterProps> = ({mode}) => {
-//   const [email, setEmail] = useState<string>('')
-//   const [password, setPassword] = useState<string>('')
-//   const [message, setMessage] = useState<string>('')
-//   const { setToken }:any = useContext(AuthContext);
-
-//   const navigate = useNavigate();
-//   const loginRegister = async () => {
-//     if (mode === 'Login') {
-//       try { 
-//           const response = await axios.post('http://localhost:5000/api/user/login', {
-//               email,
-//               password
-//           },
-//           {withCredentials:true}
-//           );
-
-//           if(response.status === 200) {
-//               setMessage(response.data.message)
-//               console.log(response.data);
-//               setToken(response.data.accessToken);
-//               navigate('/Portal')
-//           }
-//       } catch (error:any) {
-//           console.log(error);
-
-//           setToken(null);
-          
-//           setMessage(error.response.data.message)
-//           }
-//   } else if(mode ==='Register'){
-//       try { 
-//           const response = await axios.post('http://localhost:5000/api/user/register', {
-//               email,
-//               password
-//           },
-//           {withCredentials:true}
-//           );
-
-//           if(response.status === 201) {
-//               setMessage(response.data.message)
-//               console.log(response.data);
-//               navigate('/Portal')
-//           }
-//       } catch (error:any) {
-//           console.log(error);
-//           setMessage(error.response.data.message)
-//           }
-//     }
-//   }
-//   return (
-//     <>
-//     <h2>{mode}</h2>
-//         <Box component={"form"} sx={{ m: 1 }} noValidate autoComplete='off'>
-//         <TextField
-//         sx={{ m: 1 }}
-//         id='email'
-//         type='email'
-//         label='Enter your email...'
-//         variant='outlined'
-//         onChange={(e) => setEmail(e.target.value)}
-//         />
-//         <TextField
-//         sx={{ m: 1 }}
-//         id='password'
-//         type='password'
-//         label='Enter your password...'
-//         variant='outlined'
-//         onChange={(e) => setPassword(e.target.value)}
-//         />
-//     </Box>
-//     <Button variant='contained' onClick={loginRegister}>{mode}</Button>
-//     <div>{message}</div>
-//     </>
-//   )
-// }
-
-// export default LoginRegister

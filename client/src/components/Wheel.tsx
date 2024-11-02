@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useCallback } from "react";
 import { Wheel } from "react-custom-roulette";
 import { VALID_CATEGORIES, ValidCategory, Difficulty, DIFFICULTIES } from '../types/categories';
 import QuestionComponent from "./Question";
@@ -26,7 +26,7 @@ const categories: Category[] = VALID_CATEGORIES.map(category => ({
   option: category
 }));
 
-const WheelComponent: React.FC<WheelComponentProps> = ({ mode }) => {
+const WheelComponent: React.FC<WheelComponentProps> = () => {
   const [mustSpin, setMustSpin] = useState<boolean>(false);
   const [prizeNumber, setPrizeNumber] = useState<number>(0);
   const [selectedCategory, setSelectedCategory] = useState<ValidCategory | "">("");
@@ -37,8 +37,10 @@ const WheelComponent: React.FC<WheelComponentProps> = ({ mode }) => {
   const [score, setScore] = useState<number>(0);
   const [selectedDifficulty, setSelectedDifficulty] = useState<Difficulty>('medium');
   const [timer, setTimer] = useState<number>(20);
-  const { userId, userEmail, apiUrl } = useContext(AuthContext);
+  const {  apiUrl } = useContext(AuthContext);
 //   const [gamesPlayed] = useState<number>(0);
+ 
+
   
   const fetchQuestion = async (category: ValidCategory) => {
       setIsLoading(true);
@@ -71,6 +73,18 @@ const WheelComponent: React.FC<WheelComponentProps> = ({ mode }) => {
       }
   };
 
+  
+//PROBANDO NUEVO TIMER
+  const handleAnswerSubmit = useCallback((isCorrect: boolean, points: number): void => {
+      if (isCorrect) {
+        setScore(prev => prev + points);
+      }
+      setCurrentQuestion(null);        // Quitamos la pregunta actual
+      setSelectedCategory("");         // Limpiamos la categoría seleccionada
+      setError(null);                  // Limpiamos cualquier error
+      setMustSpin(false);             // Aseguramos que la rueda pueda girar nuevamente
+    }, []);
+
   const handleSpinClick = () => {
       setCurrentQuestion(null);
       setError(null);
@@ -78,137 +92,148 @@ const WheelComponent: React.FC<WheelComponentProps> = ({ mode }) => {
       setPrizeNumber(newPrizeNumber);
       setMustSpin(true);
   };
-
-  const handleAnswerSubmit = (isCorrect: boolean, points:number) => {
-    if (isCorrect) {
-      setScore(prev => prev + points);
-    }  
-    // agregar lógica para pasar a la siguiente pregunta
-    handleSpinClick(); // Esto hará girar la rueda nuevamente
-  };
+  
 
   //esto es para el temporizador
   useEffect(() => {
-    let interval: number | undefined;
-    
+    let interval: NodeJS.Timeout | undefined;
+
     if (currentQuestion) {
-        setTimer(20);
-        
-        interval = window.setInterval(() => {
-            setTimer(prev => {
-                if (prev <= 1) {
-                    clearInterval(interval);
-                    handleAnswerSubmit(false, 0);
-                    handleSpinClick();
-                    return 0;
-                }
-                return prev - 1;
-            });
-        }, 1000);
+      console.log("Iniciando temporizador");
+      setTimer(20);
+
+      interval = setInterval(() => {
+        setTimer((prev: number): number => {
+          console.log("Timer:", prev);
+          if (prev <= 1) {
+            if (interval) clearInterval(interval);
+            handleAnswerSubmit(false, 0);
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
     }
 
     return () => {
-        if (interval) clearInterval(interval);
+      if (interval) {
+        console.log("Limpiando temporizador");
+        clearInterval(interval);
+      }
     };
-}, [currentQuestion, handleAnswerSubmit, handleSpinClick]);
+  }, [currentQuestion]);
 
-    /// fin del juego y obtencion del puntaje
-    const updateUserScore = async () => {
-        try {
-          console.log('Updating user score:', { userId, userEmail, score });
-      
-          if (!userEmail) {
-            console.error('userEmail is undefined');
-            return;
-          }
-      
-          const response = await fetch('/api/leaderboard', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ userId, userEmail, score }),
-          });
-      
-          if (response.ok) {
-            console.log('User score updated successfully');
-          } else {
-            console.error('Error updating user score:', response.statusText);
-          }
-        } catch (error) {
-          console.error('Error updating user score:', error);
-        }
-      };
-    const handleGameEnd = () => {
-        updateUserScore();
-        // Additional logic to reset the game, navigate to another page, etc.
-    };
+  const handleGameEnd = (): void => {
+    setScore(0);
+    setTimer(20);
+    setCurrentQuestion(null);
+    setMustSpin(false);
+    setSelectedCategory("");
+  };
 
-
+  // log para debugging
+  useEffect(() => {
+    console.log({
+      currentQuestionExists: !!currentQuestion,
+      timerValue: timer,
+      isSpinning: mustSpin,
+      category: selectedCategory
+    });
+  }, [currentQuestion, timer, mustSpin, selectedCategory]);
+ 
   return (
-      <div className="wheel-container">
-        <div className="difficulty-selector">
+      <div className="wheel-container"style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '20px' }}>
+        <div className="wheel-section" style={{ flex: '1', marginRight: '20px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+          <Wheel
+                    mustStartSpinning={mustSpin}
+                    prizeNumber={prizeNumber}
+                    data={categories}
+                    outerBorderColor="#f2f2f2"       
+                    outerBorderWidth={10}             
+                    innerBorderColor="#f2f2f2"      
+                    radiusLineColor="#dedede"         
+                    radiusLineWidth={1}        
+                    fontSize={15}
+                    textColors={["#ffffff"]}
+                    backgroundColors={[
+                        "#F22B35",
+                        "#F99533",
+                        "#24CA69",
+                        "#514E50",
+                        "#46AEFF"  // Reducido a 5 colores para match con 5 categorías
+                    ]}
+                    onStopSpinning={async () => {
+                        setMustSpin(false);
+                        const category = categories[prizeNumber].option as ValidCategory;
+                        setSelectedCategory(category);
+                        const questionData = await fetchQuestion(category);
+                        if (questionData) {
+                          setCurrentQuestion(questionData);
+                      }
+                    }}
+                />
+
+          <div className="score-display" style={{ marginBottom: '20px', fontWeight: 'bold', fontSize: '24px' }}>
+                Score: {score}
+          </div>
+
+          <div className="timer-display" style={{ color: timer <= 5 ? 'red' : 'black', fontSize: '24px',
+          fontWeight: 'bold', marginBottom: '20px'  }}>
+            Time remaining: {timer} seconds
+          </div>
+
+        </div>
+        
+
+        <div className="game-section" style={{flex: '1', display: 'flex', flexDirection: 'column'}}>
+          <div className="difficulty-selector" style={{ display: 'flex', justifyContent: 'center', marginBottom: '20px' }}>
                 {DIFFICULTIES.map(difficulty => (
                     <button
                         key={difficulty}
                         data-difficulty={difficulty}
                         onClick={() => setSelectedDifficulty(difficulty)}
                         className={`difficulty-button ${selectedDifficulty === difficulty ? 'selected' : ''}`}
+                        style={{
+                          backgroundColor: selectedDifficulty === difficulty ? '#3f51b5' : 'white',
+                          color: selectedDifficulty === difficulty ? 'white' : '#3f51b5',
+                          padding: '10px',
+                          margin: '5px',
+                          border: 'none',
+                          borderRadius: '5px',
+                          cursor: 'pointer'
+                        }}
                     >
                         {difficulty.toUpperCase()}
                     </button>
                 ))}
-            </div>
-          <h2>{mode}</h2>
-          <div className="wheel-section">
-              <Wheel
-                  mustStartSpinning={mustSpin}
-                  prizeNumber={prizeNumber}
-                  data={categories}
-                  outerBorderColor="#f2f2f2"       
-                  outerBorderWidth={10}             
-                  innerBorderColor="#f2f2f2"      
-                  radiusLineColor="#dedede"         
-                  radiusLineWidth={1}        
-                  fontSize={15}
-                  textColors={["#ffffff"]}
-                  backgroundColors={[
-                      "#F22B35",
-                      "#F99533",
-                      "#24CA69",
-                      "#514E50",
-                      "#46AEFF"  // Reducido a 5 colores para match con 5 categorías
-                  ]}
-                  onStopSpinning={async () => {
-                      setMustSpin(false);
-                      const category = categories[prizeNumber].option as ValidCategory;
-                      setSelectedCategory(category);
-                      const questionData = await fetchQuestion(category);
-                      if (questionData) {
-                        setCurrentQuestion(questionData);
-                    }
-                  }}
-              />
           </div>
-          <div className="score-display">
-                Score: {score}
-          </div>
-          <div className="timer-display" style={{ color: timer <= 5 ? 'red' : 'black' }}>
-            Time remaining: {timer} seconds
-          </div>
-          <div className="controls-section">
+        </div>
+          
+          
+          
+          <div className="controls-section" style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px'  }}>
               <button 
                   onClick={handleSpinClick}
                   className="spin-button"
                   disabled={isLoading}
+                  style={{
+                    backgroundColor: '#3f51b5',
+                    color: 'white',
+                    padding: '10px 20px',
+                    border: 'none',
+                    borderRadius: '5px',
+                    cursor: 'pointer',
+                    fontWeight: 'bold',
+                    fontSize: '18px'
+                  }}
               >
                   {isLoading ? 'Loading...' : 'SPIN'}
               </button>
           </div>
 
-          <div className="info-section">
+          <div className="info-section" style={{ flex: '1'}}>
               {!mustSpin && selectedCategory && (
-                  <div className="selected-category">
+                  <div className="selected-category" style={{ marginBottom: '20px', fontWeight: 'bold', fontSize: '20px' }}>
                       Selected Category: {selectedCategory}
                   </div>
               )}
@@ -225,7 +250,7 @@ const WheelComponent: React.FC<WheelComponentProps> = ({ mode }) => {
             onAnswerSubmit={handleAnswerSubmit}
           />
             )}
-            <button onClick={handleGameEnd}>Finalizar Juego</button>
+            <button onClick={handleGameEnd} style={{ backgroundColor: '#3f51b5', color: 'white', padding: '10px 20px', border: 'none', borderRadius: '5px', cursor: 'pointer', fontWeight: 'bold', fontSize: '18px', marginTop: 'auto' }}>Finish</button>
           </div>
 
       </div>

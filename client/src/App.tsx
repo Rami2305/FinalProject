@@ -7,7 +7,7 @@ import LoginRegister from './components/Login';
 import WheelComponent from './components/Wheel';
 import Home from './components/Home';
 import Portal from './components/Portal'
-
+import Leaderboard from './components/Leaderboard';
 
 interface AuthContextType {
   token: string | null;
@@ -29,17 +29,20 @@ function App() {
 
   return (
     <AuthContext.Provider value={{ token, setToken, userId, setUserId, userEmail, setUserEmail, apiUrl }}>
-    <Header />
-    <Routes>
-      <Route path='/' element={<Home />} />
-      {/* <Route path='/login' element={<LoginRegister mode ='Login'/>} /> */}
-      <Route path='/register' element={<LoginRegister mode='Register' />} />
-      <Route path='/play' element={<WheelComponent mode='Play'/>} />
-      <Route path="/portal"  element={<Portal />} />
-      {/* <Route path='/leaderboard' element={<Leaderboard />} /> */}
-      {/* <Route path='/admin' element={<Auth><Admin /></Auth> } /> */}
-      
-    </Routes>
+      <div style={{ display: 'flex', flexDirection: 'column', minHeight: '50ph' }}>
+        <Header />
+        <main style={{ flex: 1, paddingTop: '5px' }}>
+          <Routes>
+            <Route path='/' element={<Home />} />
+            {/* <Route path='/login' element={<LoginRegister mode ='Login'/>} /> */}
+            <Route path='/register' element={<LoginRegister mode='Register' />} />
+            <Route path='/play' element={<WheelComponent mode='Play'/>} />
+            <Route path="/portal"  element={<Portal />} />
+            <Route path='/leaderboard' element={<Leaderboard />} />
+            {/* <Route path='/admin' element={<Auth><Admin /></Auth> } /> */}
+          </Routes>
+        </main>
+       </div>
   </AuthContext.Provider>
   )
 }

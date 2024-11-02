@@ -31,7 +31,7 @@ app.use(cors({
 
 app.use('/api/user', userRouter)
 app.use('/api/questions', questionRouter)
-app.use('/api/leaderboard', leaderboardRouter);
+// app.use('/api/leaderboard', leaderboardRouter);
 
 
 app.get('/health', (req, res) => {
