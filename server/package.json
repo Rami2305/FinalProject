@@ -1,7 +1,7 @@
 {
   "name": "server",
   "version": "1.0.0",
-  "main": "app.ts",
+  "main": "dist/app.js",
   "type": "commonjs",
   "engines": {
     "node": "18.x"
