@@ -9,26 +9,36 @@ const api = axios.create({
     }
 });
 
-// Exportar funciones específicas para diferentes tipos de llamadas
+// Interfaces para tipar las respuestas
+interface AuthResponse {
+    message: string;
+    accessToken?: string;
+    userId?: number;
+    userEmail?: string;
+}
+
 export const authAPI = {
-    login: (credentials: { email: string; password: string }) => 
-        api.post('/api/user/login', credentials),
+    login: async (credentials: { email: string; password: string }) => {
+        const response = await api.post<AuthResponse>('/api/user/login', credentials);
+        return {
+            message: response.data.message,
+            accessToken: response.data.accessToken,
+            userId: response.data.userId,
+            userEmail: response.data.userEmail
+        };
+    },
     
-    register: (credentials: { email: string; password: string }) => 
-        api.post('/api/user/register', credentials),
+    register: async (credentials: { email: string; password: string }) => {
+        const response = await api.post<AuthResponse>('/api/user/register', credentials);
+        return {
+            message: response.data.message,
+            userId: response.data.userId,
+            userEmail: response.data.userEmail
+        };
+    },
     
-    logout: () => 
-        api.delete('/user/logout')
+    logout: () => api.delete('/user/logout')
 };
 
-export const questionsAPI = {
-    getQuestions: () => api.get('/api/questions'),
-    // Añade aquí otras llamadas relacionadas con preguntas
-};
-
-export const leaderboardAPI = {
-    getLeaderboard: () => api.get('/api/leaderboard'),
-    // Añade aquí otras llamadas relacionadas con el leaderboard
-};
 
 export default api;

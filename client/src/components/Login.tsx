@@ -9,13 +9,12 @@ interface LoginRegisterProps {
   mode: 'Login' | 'Register';  
 }
 const LoginRegister: React.FC<LoginRegisterProps> = ({ mode }) => {
-  const [email, setEmail] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
-  const [message, setMessage] = useState<string>('');
-  const [loading, setLoading] = useState<boolean>(false);
-  const [showPassword, setShowPassword] = useState<boolean>(false);
-  const { setToken }: any = useContext(AuthContext);
-
+    const [email, setEmail] = useState<string>('');
+    const [password, setPassword] = useState<string>('');
+    const [message, setMessage] = useState<string>('');
+    const [loading, setLoading] = useState<boolean>(false);
+    const [showPassword, setShowPassword] = useState<boolean>(false);
+    const { setToken, setUserId, setUserEmail }: any = useContext(AuthContext);
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -24,26 +23,31 @@ const LoginRegister: React.FC<LoginRegisterProps> = ({ mode }) => {
       setMessage('');
 
       try {
-        const response = await (mode === 'Login' 
-            ? authAPI.login({ email, password })
-            : authAPI.register({ email, password }));
-
-        if (response.status === 200 || response.status === 201) {
-            setMessage(response.data.message);
-            if (mode === 'Login') {
-                setToken(response.data.accessToken);
-            }
+        if (mode === 'Login') {
+            const response = await authAPI.login({ email, password });
+            setToken(response.accessToken);
+            setUserId(response.userId);
+            setUserEmail(response.userEmail);
+            setMessage(response.message);
             navigate('/Portal');
+        } else {
+            const response = await authAPI.register({ email, password });
+            setMessage(response.message);
+            // Opcional: podrías auto-login después del registro o redirigir al login
+            navigate('/login');
         }
     } catch (error: any) {
         console.error('Error:', error);
-        if (mode === 'Login') setToken(null);
+        if (mode === 'Login') {
+            setToken(null);
+            setUserId(null);
+            setUserEmail(null);
+        }
         setMessage(error.response?.data?.message || 'Error en el servidor');
     } finally {
         setLoading(false);
     }
 };
-
   return (
       <Container component="main" maxWidth="xs">
           <Paper 
