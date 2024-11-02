@@ -2,19 +2,20 @@ import {AppBar, Toolbar, Button, Stack, Typography, Box, Container} from '@mui/m
 import { Link } from 'react-router-dom'
 import { useContext } from 'react'
 import { AuthContext } from '../App'
-import axios from 'axios'
+import { authAPI } from '../config/axios'
 import { Home, ExitToApp, EmojiEvents, SportsEsports } from '@mui/icons-material';
 const Header: React.FC = () => {
     const authContext = useContext(AuthContext);
     const { token, setToken }:any = authContext;
+
     const logout = async () => {
         try {
-            const response = await axios.delete('http://localhost:5000/user/logout');
+            const response = await authAPI.logout();
             if (response.status === 200) {
                 setToken(null);
             }
         } catch (error) {
-            console.log(error);
+            console.error('Error during logout:', error);
         }
     };
 

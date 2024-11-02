@@ -1,4 +1,4 @@
-import axios from 'axios'
+import { authAPI } from '../config/axios'
 import {useState, useContext} from 'react'
 import { useNavigate } from 'react-router-dom'
 import {   Box,   TextField,   Button,   Container,   Paper,   Typography,   Alert,   CircularProgress,  IconButton,  InputAdornment} from '@mui/material';
@@ -24,30 +24,25 @@ const LoginRegister: React.FC<LoginRegisterProps> = ({ mode }) => {
       setMessage('');
 
       try {
-          const url = mode === 'Login' 
-              ? 'http://localhost:5000/api/user/login'
-              : 'http://localhost:5000/api/user/register';
+        const response = await (mode === 'Login' 
+            ? authAPI.login({ email, password })
+            : authAPI.register({ email, password }));
 
-          const response = await axios.post(url, 
-              { email, password },
-              { withCredentials: true }
-          );
-
-          if (response.status === 200 || response.status === 201) {
-              setMessage(response.data.message);
-              if (mode === 'Login') {
-                  setToken(response.data.accessToken);
-              }
-              navigate('/Portal');
-          }
-      } catch (error: any) {
-          console.log(error);
-          if (mode === 'Login') setToken(null);
-          setMessage(error.response?.data?.message || 'Error en el servidor');
-      } finally {
-          setLoading(false);
-      }
-  };
+        if (response.status === 200 || response.status === 201) {
+            setMessage(response.data.message);
+            if (mode === 'Login') {
+                setToken(response.data.accessToken);
+            }
+            navigate('/Portal');
+        }
+    } catch (error: any) {
+        console.error('Error:', error);
+        if (mode === 'Login') setToken(null);
+        setMessage(error.response?.data?.message || 'Error en el servidor');
+    } finally {
+        setLoading(false);
+    }
+};
 
   return (
       <Container component="main" maxWidth="xs">
