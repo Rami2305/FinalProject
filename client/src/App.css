@@ -1,42 +1,39 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+body {
+  background: linear-gradient(135deg, #FFD700, #ADFF2F, #00FA9A, #00CED1);
+  background-size: 400% 400%;
+  animation: gradientAnimation 15s ease infinite;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
-}
-
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
+@keyframes gradientAnimation {
+  0% {
+    background-position: 0% 50%;
   }
-  to {
-    transform: rotate(360deg);
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
   }
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+.MuiPaper-root {
+  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
 }
 
-.card {
-  padding: 2em;
+.MuiTypography-root {
+  color: #2E8B57;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-.read-the-docs {
-  color: #888;
+.MuiButton-root {
+  background-color: #3CB371;
+  color: white;
+  transition: transform 0.3s ease;
+}
+
+.MuiButton-root:hover {
+  transform: scale(1.05);
+  background-color: #2E8B57;
 }

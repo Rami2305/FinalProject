@@ -29,7 +29,7 @@ const Portal: React.FC = ( ) => {
                 </Typography>
 
                 <Stack spacing={3}>
-                    <Paper sx={{ p: 3, backgroundColor: 'rgba(255, 255, 255, 0.8)', borderRadius: '10px', boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)'  }}>
+                    <Paper sx={{ p: 3, backgroundColor: 'rgba(144, 238, 144, 0.8)', borderRadius: '10px', boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)'  }}>
                         <Typography variant="h6" sx={{ color: '#3f51b5', fontWeight: 'bold' }}>
                             Quick Start
                         </Typography>
@@ -38,8 +38,8 @@ const Portal: React.FC = ( ) => {
                         </Typography>
                     </Paper>
 
-                    <Paper sx={{ p: 3 }}>
-                        <Typography variant="h6" sx={{ color: '#3f51b5', fontWeight: 'bold' }}>
+                    <Paper sx={{ p: 3, backgroundColor: 'rgba(255, 165, 0, 0.8)', borderRadius: '10px', boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)' }}>
+                        <Typography variant="h6" sx={{ color: '#e65100', fontWeight: 'bold' }}>
                             How to Play
                         </Typography>
                         <Typography component="div">
@@ -51,7 +51,7 @@ const Portal: React.FC = ( ) => {
                             </Stack>
                         </Typography>
                      </Paper>    
-                    <Paper sx={{ p: 3 }}>
+                    <Paper sx={{ p: 3, backgroundColor: 'rgba(173, 216, 230, 0.8)', borderRadius: '10px', boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)' }}>
                         <Typography variant="h6">Your Stats</Typography>
                         <Typography>
                             Games Played:

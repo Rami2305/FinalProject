@@ -29,17 +29,17 @@ function App() {
 
   return (
     <AuthContext.Provider value={{ token, setToken, userId, setUserId, userEmail, setUserEmail, apiUrl }}>
-      <div style={{ display: 'flex', flexDirection: 'column', minHeight: '50ph' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', alignItems: 'center' }}>
         <Header />
-        <main style={{ flex: 1, paddingTop: '5px' }}>
+        <main style={{ flex: 1, paddingTop: '64px' }}>
           <Routes>
             <Route path='/' element={<Home />} />
-            {/* <Route path='/login' element={<LoginRegister mode ='Login'/>} /> */}
+           
             <Route path='/register' element={<LoginRegister mode='Register' />} />
             <Route path='/play' element={<WheelComponent mode='Play'/>} />
             <Route path="/portal"  element={<Portal />} />
             <Route path='/leaderboard' element={<Leaderboard />} />
-            {/* <Route path='/admin' element={<Auth><Admin /></Auth> } /> */}
+            
           </Routes>
         </main>
        </div>
